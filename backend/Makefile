@@ -7,7 +7,6 @@ build:
 
 app:
 	docker run -p 5000:5000 $(IMAGE_NAME)
-	    -e CORS_ORIGIN_WHITELIST='http://localhost:3000' \
 
 clean:
 	docker stop $$(docker ps -aq --filter ancestor=$(IMAGE_NAME))
