@@ -11,6 +11,7 @@ from io import StringIO
 import pysam
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from fastapi.middleware.cors import CORSMiddleware
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -19,6 +20,21 @@ logger = logging.getLogger(__name__)
 app = FastAPI(
     title="Plasmid DNA Sequence Analysis API",
     summary="API endpoints include sequence analysis of FASTA and BAM files.",
+)
+
+origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Use the list of origins you've defined
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
 )
 
 ALLOWED_EXTENSIONS = {"fasta", "fas", "fa", "bam"}
