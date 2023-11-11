@@ -1,0 +1,17 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: ./backend  # Build from the 'backend' directory
+    ports:
+      - "5000:5000"  # Map container port to host port
+
+  frontend:
+    build:
+      context: ./frontend  # Build from the 'frontend' directory
+    ports:
+      - "3000:3000"  # Map container port to host port
+    depends_on:
+      - backend  # Wait for the 'backend' service to be up
+
+# You can add other services or configurations as needed
