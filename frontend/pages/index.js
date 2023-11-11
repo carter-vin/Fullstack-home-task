@@ -9,6 +9,7 @@ export default function Home() {
   const [file, setFile] = useState(null);
   const [analysisResults, setAnalysisResults] = useState(null);
   const [isSequenceVisible, setIsSequenceVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -16,27 +17,32 @@ export default function Home() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (file) {
-      const fileExtension = getFileExtension(file.name);
-      const formData = new FormData();
-      formData.append("file", file);
 
-      try {
-        const response = await fetch(`http://0.0.0.0:5000/upload/${fileExtension}/`, { // Replace with your actual backend URL
-          method: 'POST',
-          body: formData,
-        });
+    // Reset error message
+    setErrorMessage('');
+    if (!file) {
+      setErrorMessage('Please select a file to analyze.');
+      return;
+    }
 
-        if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
-        }
+    // Fetch file data by calling API
+    const fileExtension = getFileExtension(file.name);
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const response = await fetch(`http://0.0.0.0:5000/upload/${fileExtension}/`, {
+        method: 'POST',
+        body: formData,
+      });
 
-        const data = await response.json();
-        setAnalysisResults(data);  // Assuming you have a state variable to store the results
-      } catch (error) {
-        console.error("Failed to analyze the file:", error);
-        // Handle errors here, e.g., show an error message to the user
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
       }
+
+      const data = await response.json();
+      setAnalysisResults(data);
+    } catch (error) {
+      console.error("Failed to analyze the file:", error);
     }
   };
 
@@ -79,6 +85,9 @@ export default function Home() {
       <h1 className={styles.title}>Plasmid Sequence Analysis Tool</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.inputGroup}>
+          <div className={styles.instructions}>
+            <p>Welcome to the Plasmid Sequence Analysis Tool. Please upload a FASTA or BAM file to get started.</p>
+          </div>
           <label htmlFor="fileInput" className={styles.title}>Upload DNA Sequence File:</label>
           <input
             type="file"
@@ -87,6 +96,7 @@ export default function Home() {
             accept=".fasta, .bam"
             className={styles.input}
           />
+          <div className={styles.errorMessage}>{errorMessage}</div>
         </div>
         <button type="submit" className={styles.button}>Analyze File</button>
       </form>
