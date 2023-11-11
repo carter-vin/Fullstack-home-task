@@ -1,9 +1,21 @@
 /* styles/Home.module.css */
 .container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  height: 100vh; /* Full viewport height */
+}
+
+.leftColumn, .rightColumn {
+  display: flex;
+  flex-direction: column;
   text-align: center;
+  align-items: center; /* Center content horizontally in each column */
+}
+
+.form, .results {
+  width: 80%; /* Adjust width as needed */
 }
 
 .title {
@@ -16,6 +28,12 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%; /* Adjust width as needed */
+  min-height: 400px; /* Increase the height of the card */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
 }
 
 .input{

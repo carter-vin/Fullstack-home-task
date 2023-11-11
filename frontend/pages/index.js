@@ -82,51 +82,55 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Plasmid Sequence Analysis Tool</h1>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.inputGroup}>
-          <div className={styles.instructions}>
-            <p>Welcome to the Plasmid Sequence Analysis Tool. Please upload a FASTA or BAM file to get started.</p>
+      <div className={styles.leftColumn}>
+        <h1 className={styles.title}>Plasmid Sequence Analysis Tool</h1>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.inputGroup}>
+            <div className={styles.instructions}>
+              <p>Welcome to the Plasmid Sequence Analysis Tool. Please upload a FASTA or BAM file to get started.</p>
+            </div>
+            <label htmlFor="fileInput" className={styles.title}>Upload DNA Sequence File:</label>
+            <input
+              type="file"
+              id="fileInput"
+              onChange={handleFileChange}
+              accept=".fasta, .bam"
+              className={styles.input}
+            />
+            <div className={styles.errorMessage}>{errorMessage}</div>
           </div>
-          <label htmlFor="fileInput" className={styles.title}>Upload DNA Sequence File:</label>
-          <input
-            type="file"
-            id="fileInput"
-            onChange={handleFileChange}
-            accept=".fasta, .bam"
-            className={styles.input}
-          />
-          <div className={styles.errorMessage}>{errorMessage}</div>
-        </div>
-        <button type="submit" className={styles.button}>Analyze File</button>
-      </form>
-      {analysisResults && (
-        <div className={styles.results}>
-          <h2 className={styles.margins}>Analysis Results</h2>
-          <p className={styles.margins}>Sequence Length: {analysisResults.sequence_length}</p>
-          <p className={styles.margins}>G/C Content: {analysisResults.gc_content.toFixed(2)}%</p>
-          <div className={styles.margins}>
-            <button onClick={() => setIsSequenceVisible(!isSequenceVisible)}>
-              {isSequenceVisible ? 'Hide' : 'Show'} Reverse Complement
-            </button>
-            {isSequenceVisible && <p>Reverse Complement: {formatSequence(analysisResults.reverse_complement)}</p>}
-          </div>
+          <button type="submit" className={styles.button}>Analyze File</button>
+        </form>
+      </div>
+      <div className={styles.rightColumn}>
+        {analysisResults && (
+          <div className={styles.results}>
+            <h2 className={styles.margins}>Analysis Results</h2>
+            <p className={styles.margins}>Sequence Length: {analysisResults.sequence_length}</p>
+            <p className={styles.margins}>G/C Content: {analysisResults.gc_content.toFixed(2)}%</p>
+            <div className={styles.margins}>
+              <button onClick={() => setIsSequenceVisible(!isSequenceVisible)}>
+                {isSequenceVisible ? 'Hide' : 'Show'} Reverse Complement
+              </button>
+              {isSequenceVisible && <p>Reverse Complement: {formatSequence(analysisResults.reverse_complement)}</p>}
+            </div>
 
-          {/* Conditionally display BAM file specific results */}
-          {analysisResults.reads_count && (
-            <>
-              <p className={styles.margins}>Reads Count: {analysisResults.reads_count}</p>
-              {/* Optionally display histogram data */}
-              {analysisResults.histogram_data && (
-                <div className={styles.margins}>
-                  <h3>Histogram of Read Lengths</h3>
-                  {histogramChart}
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      )}
+            {/* Conditionally display BAM file specific results */}
+            {analysisResults.reads_count && (
+              <>
+                <p className={styles.margins}>Reads Count: {analysisResults.reads_count}</p>
+                {/* Optionally display histogram data */}
+                {analysisResults.histogram_data && (
+                  <div className={styles.margins}>
+                    <h3>Histogram of Read Lengths</h3>
+                    {histogramChart}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
